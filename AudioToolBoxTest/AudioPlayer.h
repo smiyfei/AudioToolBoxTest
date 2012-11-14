@@ -9,15 +9,34 @@
 #import <Foundation/Foundation.h>
 #import "AudioToolBox/AudioToolBox.h"
 
+#define NUM_BUFFERS 3
+
 @interface AudioPlayer : NSObject
 {
-    AudioFileStreamID fileStreamId;// 文件流
-    AudioQueueRef queueRef;// 播放队列
-    AudioStreamBasicDescription streamBasicDes;// 格式化音频数据
-    AudioQueueBufferRef queueBufferRef;// 数据缓冲
+    AudioFileID audioFileID;//播放音频文件id
+    AudioStreamBasicDescription asbd;//音频描述
     
-    OSStatus error;// 错误信息
+    AudioQueueRef audioQueue;//播放队列
+    
+    SInt64 packetIndex; 
+    UInt32 numPacketsToRead;
+    UInt32 bufferByteSize;
+    
+    AudioStreamPacketDescription *audioStreamPacketDesc;
+    AudioQueueBufferRef buffers[NUM_BUFFERS];
 }
 
+@property AudioQueueRef audioQueue;
+
+- (id)initWithAudio:(NSString *)path;
+- (void)audioQueueOutputWithQueue:(AudioQueueRef)audioQueue
+                      queueBuffer:(AudioQueueBufferRef)audioQueueBuffer;
+- (UInt32)readPacketsIntoBuffer:(AudioQueueBufferRef)buffer;
+
+static void BufferCallback(void *inUserData,AudioQueueRef inAQ,AudioQueueBufferRef buffer);
+
 - (void)playAudio;
+- (void)pause;
+- (void)stop;
+- (void)GetCurrentTime;
 @end

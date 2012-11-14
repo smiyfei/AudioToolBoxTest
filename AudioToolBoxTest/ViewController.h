@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class AudioPlayer;
 
 @interface ViewController : UIViewController
+
+@property(nonatomic,retain) AudioPlayer *audioPlayer;
 
 @end
