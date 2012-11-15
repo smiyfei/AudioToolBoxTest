@@ -38,5 +38,7 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,AudioQueueBufferR
 - (void)playAudio;
 - (void)pause;
 - (void)stop;
+- (double)duration;
 - (void)GetCurrentTime;
+- (void)seekToTime:(double)seekTime;
 @end

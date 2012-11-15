@@ -8,12 +8,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "AudioToolBoxTest/AudioPlayer.m"
-         timestampString = "374581808.997701"
+         timestampString = "374664586.391481"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "54"
-         endingLineNumber = "54"
-         landmarkName = "-GetCurrentTime"
+         startingLineNumber = "51"
+         endingLineNumber = "51"
+         landmarkName = "-duration"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

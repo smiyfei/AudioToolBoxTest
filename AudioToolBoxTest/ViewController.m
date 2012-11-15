@@ -59,6 +59,9 @@
     NSString *path = [[NSBundle mainBundle] pathForResource:@"Music" ofType:@"mp3"];
     _audioPlayer = [[AudioPlayer alloc] initWithAudio:path];
     [_audioPlayer playAudio];
+//    [_audioPlayer GetCurrentTime];
+//    [_audioPlayer seekToTime];
+    [_audioPlayer duration];
 }
 
 - (void)stop:(UIButton *)sender

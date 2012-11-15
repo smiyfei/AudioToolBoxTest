@@ -20,6 +20,7 @@
 		1D1BE9D7164BB3DE00E47ED8 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1BE9D6164BB3DE00E47ED8 /* ViewController.m */; };
 		1D1BE9DA164BB43900E47ED8 /* AudioPlayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D1BE9D9164BB43900E47ED8 /* AudioPlayer.m */; };
 		1D891AC216539908002C660B /* Music.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 1D891AC116539908002C660B /* Music.mp3 */; };
+		1D97506516549C9800DEBA30 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D97506416549C9800DEBA30 /* CoreAudio.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		1D1BE9D8164BB43900E47ED8 /* AudioPlayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AudioPlayer.h; sourceTree = "<group>"; };
 		1D1BE9D9164BB43900E47ED8 /* AudioPlayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AudioPlayer.m; sourceTree = "<group>"; };
 		1D891AC116539908002C660B /* Music.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = Music.mp3; sourceTree = "<group>"; };
+		1D97506416549C9800DEBA30 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -49,6 +51,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1D97506516549C9800DEBA30 /* CoreAudio.framework in Frameworks */,
 				1D1BE9D4164BB39A00E47ED8 /* AudioToolbox.framework in Frameworks */,
 				1D1BE9B7164BB38700E47ED8 /* UIKit.framework in Frameworks */,
 				1D1BE9B9164BB38700E47ED8 /* Foundation.framework in Frameworks */,
@@ -62,6 +65,7 @@
 		1D1BE9A7164BB38700E47ED8 = {
 			isa = PBXGroup;
 			children = (
+				1D97506416549C9800DEBA30 /* CoreAudio.framework */,
 				1D1BE9D3164BB39A00E47ED8 /* AudioToolbox.framework */,
 				1D1BE9BC164BB38700E47ED8 /* AudioToolBoxTest */,
 				1D1BE9B5164BB38700E47ED8 /* Frameworks */,

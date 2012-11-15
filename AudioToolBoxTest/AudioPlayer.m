@@ -7,6 +7,8 @@
 //
 
 #import "AudioPlayer.h"
+#include <mach/mach_time.h>
+#include <CoreAudio/CoreAudioTypes.h>
 
 static UInt32 gBufferSizeBytes=0x10000;//It muse be pow(2,x)
 
@@ -41,6 +43,16 @@ static UInt32 gBufferSizeBytes=0x10000;//It muse be pow(2,x)
     AudioQueueStop(audioQueue, false);
 }
 
+- (double)duration
+{
+    double duration = 0.0;
+    AudioTimeStamp timeStamp;
+    AudioQueueGetCurrentTime(audioQueue, NULL, &timeStamp, NULL);
+    
+    
+    return duration;
+}
+
 - (void)GetCurrentTime
 {
     if (audioQueue != nil)
@@ -52,11 +64,45 @@ static UInt32 gBufferSizeBytes=0x10000;//It muse be pow(2,x)
         if(status == noErr)
         {
             AudioQueueGetCurrentTime(audioQueue, timeLine, &timeStamp, NULL);
-            timeInterval = timeStamp.mSampleTime / asbd.mSampleRate; // modified
+            timeInterval = timeStamp.mSampleTime * 1000000 / asbd.mSampleRate; // modified
+            NSLog(@"sample rate : %f",asbd.mSampleRate);
             NSLog(@"%f",timeInterval);
-            
         }
     }
+    
+}
+
+- (void)seekToTime:(double)seekTime
+{
+//    struct AudioTimeStamp
+//    {
+//        Float64         mSampleTime;
+//        UInt64          mHostTime;
+//        Float64         mRateScalar;
+//        UInt64          mWordClockTime;
+//        SMPTETime       mSMPTETime;
+//        UInt32          mFlags;
+//        UInt32          mReserved;
+//    };
+//    typedef struct AudioTimeStamp   AudioTimeStamp;
+    
+    
+//    AudioTimeStamp timeStamp = {0};
+//    SInt32 theNumberOfSecondsInTheFuture = -5;
+    UInt64 absolute_time = mach_absolute_time();
+    NSLog(@"absolute_time : %lli",absolute_time);
+
+//    AudioQueueStart(audioQueue, &timeStamp);
+    const int64_t kOneMillion = 1000 * 1000;
+    static mach_timebase_info_data_t s_timebase_info;
+    
+    if (s_timebase_info.denom == 0) {
+        (void) mach_timebase_info(&s_timebase_info);
+    }
+    
+    // mach_absolute_time() returns billionth of seconds,
+    // so divide by one million to get milliseconds
+    NSLog(@"test time : %i",(int)((mach_absolute_time() * s_timebase_info.numer) / (kOneMillion * s_timebase_info.denom)));
     
 }
 
@@ -64,7 +110,6 @@ static UInt32 gBufferSizeBytes=0x10000;//It muse be pow(2,x)
 static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
                            AudioQueueBufferRef buffer){
     NSLog(@"audioqueue new output finished");
-    
     AudioPlayer* player=(AudioPlayer*)inUserData;
     [player audioQueueOutputWithQueue:inAQ queueBuffer:buffer];
 }
@@ -106,7 +151,6 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
     }
 }
 
-
 - (AudioQueueRef *)createQueueWithAudioPath:(NSString *)path
 {
     UInt32 size,maxPacketSize;
@@ -120,6 +164,7 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
         return nil;
     }
     
+    //为播放队列分配缓冲区（此处设置为3个）
     for (int i = 0; i < NUM_BUFFERS; i++)
     {
         AudioQueueEnqueueBuffer(audioQueue, buffers[i], 0, nil);
@@ -131,6 +176,7 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
     
     //创建播放用的音频队列
     AudioQueueNewOutput(&asbd, BufferCallback, self, nil, nil,0, &audioQueue);
+    
     
     //计算单位时间包含的包数
     if (asbd.mBytesPerPacket == 0 || asbd.mFramesPerPacket == 0)
@@ -152,7 +198,6 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
         audioStreamPacketDesc = nil;
     }
     
-    
     //设置magic cookie
     AudioFileGetProperty(audioFileID, kAudioFilePropertyMagicCookieData, &size, nil);
     if (size > 0)
@@ -170,6 +215,10 @@ static void BufferCallback(void *inUserData,AudioQueueRef inAQ,
         if ([self readPacketsIntoBuffer:buffers[i]] == 1)
         {
             break;
+        }
+        else
+        {
+            NSLog(@"buffer[%i] is filled",i);
         }
     }
 
